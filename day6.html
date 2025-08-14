@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact Management Module</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<h2>Contact Management Module Demo</h2>
+
+<button id="showContactsBtn">Show All Contacts</button>
+<pre id="output"></pre>
+
+<script>
+  // 1) Create an array of contact objects with properties + method
+  const contacts = [
+    {
+      name: 'Alice Johnson',
+      phone: '123-456-7890',
+      email: 'alice@example.com',
+      displayInfo() {
+        // 2) Use destructuring inside method
+        const { name, phone, email } = this;
+        return `Name: ${name}\nPhone: ${phone}\nEmail: ${email}`;
+      }
+    },
+    {
+      name: 'Bob Smith',
+      phone: '987-654-3210',
+      email: 'bob@example.com',
+      displayInfo() {
+        const { name, phone, email } = this;
+        return `Name: ${name}\nPhone: ${phone}\nEmail: ${email}`;
+      }
+    }
+  ];
+
+  // 3) Access contact properties using dot and bracket notation
+  function printAllContacts(arr) {
+    let output = '';
+    arr.forEach((contact, index) => {
+      // dot notation
+      output += `Contact ${index + 1} Name (dot): ${contact.name}\n`;
+      // bracket notation
+      output += `Contact ${index + 1} Phone (bracket): ${contact['phone']}\n`;
+      // display full info using method
+      output += contact.displayInfo() + '\n---\n';
+    });
+    return output;
+  }
+
+  // 4) Use rest parameters to add multiple contacts at once
+  function addContacts(...newContacts) {
+    newContacts.forEach(contact => contacts.push(contact));
+  }
+
+  // 5) Use spread operator to merge multiple contact arrays
+  const moreContacts = [
+    { name: 'Charlie Green', phone: '555-123-4567', email: 'charlie@example.com', displayInfo() { 
+        const {name, phone, email} = this; 
+        return `Name: ${name}\nPhone: ${phone}\nEmail: ${email}`;
+      } 
+    }
+  ];
+
+  const mergedContacts = [...contacts, ...moreContacts];
+
+  // Demonstrate call(), apply(), and bind()
+  const externalContact = {
+    name: 'Diana Prince',
+    phone: '444-555-6666',
+    email: 'diana@example.com'
+  };
+
+  // Borrow displayInfo method from contacts[0]
+  // call() example
+  const callResult = contacts[0].displayInfo.call(externalContact);
+
+  // apply() example
+  const applyResult = contacts[0].displayInfo.apply(externalContact);
+
+  // bind() example
+  const boundDisplay = contacts[0].displayInfo.bind(externalContact);
+  const bindResult = boundDisplay();
+
+  // Hook to button to show output
+  document.getElementById('showContactsBtn').addEventListener('click', () => {
+    let output = '--- All Contacts ---\n';
+    output += printAllContacts(mergedContacts);
+    output += '\n--- call() borrowed method ---\n' + callResult + '\n';
+    output += '\n--- apply() borrowed method ---\n' + applyResult + '\n';
+    output += '\n--- bind() borrowed method ---\n' + bindResult + '\n';
+
+    // Also demonstrate addContacts()
+    addContacts(
+      {
+        name: 'Eve Adams',
+        phone: '777-888-9999',
+        email: 'eve@example.com',
+        displayInfo() {
+          const { name, phone, email } = this;
+          return `Name: ${name}\nPhone: ${phone}\nEmail: ${email}`;
+        }
+      },
+      {
+        name: 'Frank Moore',
+        phone: '222-333-4444',
+        email: 'frank@example.com',
+        displayInfo() {
+          const { name, phone, email } = this;
+          return `Name: ${name}\nPhone: ${phone}\nEmail: ${email}`;
+        }
+      }
+    );
+
+    output += '\n--- After Adding More Contacts ---\n';
+    output += printAllContacts(contacts);
+
+    document.getElementById('output').textContent = output;
+  });
+</script>
+
+</body>
+</html>
