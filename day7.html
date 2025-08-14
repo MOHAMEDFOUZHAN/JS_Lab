@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Library Management System</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    color: #2c3e50;
+  }
+  .book-list {
+    margin-top: 20px;
+  }
+  .book-item {
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .book-item p {
+    margin: 5px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Library Management System</h1>
+<div class="book-list" id="bookList"></div>
+
+<script>
+  // Book class
+  class Book {
+    constructor(title, author, publishedYear) {
+      this.title = title;
+      this.author = author;
+      this.publishedDate = new Date(publishedYear, 0, 1);
+    }
+
+    getSummary() {
+      const year = this.publishedDate.getFullYear();
+      return `${this.title} by ${this.author}, published in ${year}.`;
+    }
+  }
+
+  // EBook subclass
+  class EBook extends Book {
+    constructor(title, author, publishedYear, fileSize) {
+      super(title, author, publishedYear);
+      this.fileSize = fileSize;
+    }
+
+    getSummary() {
+      const parentSummary = super.getSummary();
+      return `${parentSummary} File size: ${this.fileSize}MB.`;
+    }
+  }
+
+  // Create instances
+  const books = [
+    new Book('To Kill a Mockingbird', 'Harper Lee', 1960),
+    new Book('1984', 'George Orwell', 1949),
+    new EBook('Digital Fortress', 'Dan Brown', 1998, 5),
+    new EBook('Clean Code', 'Robert C. Martin', 2008, 3),
+  ];
+
+  // Display books on page
+  const bookListDiv = document.getElementById('bookList');
+
+  books.forEach(book => {
+    const bookDiv = document.createElement('div');
+    bookDiv.classList.add('book-item');
+
+    const title = document.createElement('h3');
+    title.textContent = book.title;
+
+    const summary = document.createElement('p');
+    summary.textContent = book.getSummary();
+
+    bookDiv.appendChild(title);
+    bookDiv.appendChild(summary);
+
+    bookListDiv.appendChild(bookDiv);
+  });
+</script>
+
+</body>
+</html>
